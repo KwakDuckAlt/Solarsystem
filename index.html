@@ -92,10 +92,10 @@ function sel(){cfg=null;sc='menu';document.body.classList.toggle('lt',!!U.lt);
  const ids=sm==2?[10,11,12]:ST.map((_,i)=>i).filter(i=>i<10&&(U.belt||i!=4)),A=sm==1?U.hs:U.st,B=sm==1?U.hb:U.bs;let g='',n=0;
  ids.forEach(i=>{const s=ST[i];n++;const lk=TA?0:sm==0?i>=U.un:sm==2?i>10&&!U.st[i-1]:0,sr=A[i]||0;g+=`<div class="cd${lk?' lk':''}" data-i="${i}"><div class="pl" style="background:radial-gradient(circle at 35% 30%,#fff,${s.c} 40%,#111)"></div><b>${sm==2?'':n+'. '}${s.n.split(' · ')[0]}</b><span>${lk?'🔒':'★'.repeat(sr)+'☆'.repeat(3-sr)}</span><small>${B[i]?B[i]+'점':'&nbsp;'}</small></div>`});
  const tb=`<div class="tb"><button class="${sm==0?'on':''}" data-m="0">일반</button><button class="${sm==1?'on':''}" data-m="1">🔥하드코어</button>${U.hcall?`<button class="${sm==2?'on':''}" data-m="2">✨히든</button>`:''}</div>`;
- ovh(`<h1>스테이지 선택</h1><div>${TA?TN+' (테스트)':DB.c} 님 · 총 플레이 ${fmt(U.t)}${O.pr?' · 연습':''}${O.one?' · 한 생명':''}${O.beg?' · 거지':''}</div>${U.end?tb:''}<div class="gr">${g}</div><button id="op" class="sc">⚙ 옵션</button><button id="lo" class="sc">로그아웃</button>${U.end&&!TA?'<button id="e2" class="sc">엔딩 다시 보기</button>':''}`);
+ ovh(`<h1>스테이지 선택</h1><div>${TA?TN+' (테스트)':DB.c} 님 · 총 플레이 ${fmt(U.t)}${O.pr?' · 연습':''}${O.one?' · 한 생명':''}${O.beg?' · 거지':''}</div>${U.end?tb:''}<div class="gr">${g}</div><button id="op" class="sc">⚙ 옵션</button><button id="lo" class="sc">로그아웃</button>${U.end&&!TA?'<button id="e2" class="sc">엔딩 다시 보기</button>':''}${U.lt&&!TA?'<button id="e3" class="sc">진엔딩 다시 보기</button>':''}`);
  document.querySelectorAll('.cd').forEach(e=>e.onclick=()=>{if(!e.classList.contains('lk'))intro(+e.dataset.i,sm==1)});
  document.querySelectorAll('.tb button').forEach(b=>b.onclick=()=>{sm=+b.dataset.m;sel()});
- $('op').onclick=opts;$('lo').onclick=()=>{if(!TA){DB.c='';sv()}TA=0;U=null;document.body.classList.remove('lt');title()};if(U.end&&!TA)$('e2').onclick=()=>ending(0)}
+ $('op').onclick=opts;$('lo').onclick=()=>{if(!TA){DB.c='';sv()}TA=0;U=null;document.body.classList.remove('lt');title()};if(U.end&&!TA)$('e2').onclick=()=>{document.body.classList.remove('lt');ending(0)};if(U.lt&&!TA)$('e3').onclick=()=>{document.body.classList.remove('lt');ending2(0)}}
 function opts(){const L=[['pr','연습 모드','HP가 0이 되어도 절대 괴물에게 사망하지 않아요 (HP가 마이너스까지 내려가요). 대신 레벨을 해금하거나 점수를 갱신할 수 없어요.'],['one','한 생명','HP가 1로 시작해요.'],['beg','거지 모드','술래 변신 등의 부스터가 사라져요.'],['dl','괴물 대사','켜면 그림자(괴물)들이 가끔 대사를 말해요. 끄면 그림자 대사가 나오지 않아요. 컷신은 그대로 나와요.']];
  ovh(`<h1>옵션</h1><div class="op">${L.map(([k,n,d])=>`<div class="or"><label><input type="checkbox" data-k="${k}" ${O[k]?'checked':''}${TA&&k=='pr'?' disabled':''}>${n}${TA&&k=='pr'?' 🔒':''}</label><button class="q" data-q="${k}">?</button><div class="qi" id="q_${k}">${d}</div></div>`).join('')}</div><button id="ob2">돌아가기</button>`);
  document.querySelectorAll('.op input').forEach(e=>e.onchange=()=>{O[e.dataset.k]=e.checked?1:0;sv();e.blur()});
@@ -111,8 +111,9 @@ function addMoon(a,or,sp){const r=ent(0,0,30*S);r.orb=1;r.a=a;r.or=or;r.sp=sp;ro
 function addRocks(n){for(let k=0;k<n;k++){const q=rp(40),r=ent(q.x,q.y,rnd(14,24)*S),a=rnd(0,6.28),v=rnd(40,90)*S;r.vx=Math.cos(a)*v;r.vy=Math.sin(a)*v;rocks.push(r)}}
 function addClouds(n){for(let k=0;k<n;k++)clouds.push({x:rnd(100,W-100),y:rnd(100,H-100),vx:rnd(-25,25)*S,vy:rnd(-25,25)*S,r:80*S})}
 function nova(){ch.forEach(c=>c.fz=5);lz=[];zp=[];rg=[];bu=[];fire=[];score+=100;shake=.5;inv=Math.max(inv,2);fx(p.x,p.y,'#fff',50,'🌟 초신성!')}
-const LD=['…가지 마','혼자는 싫어','잡았다…','같이 있어 줘','차가워…'],LB=['같이 놀자!','히히, 잡아봐~','고마워','따뜻해','또 놀러 와!'];
+const LD=['…가지 마','혼자는 싫어','잡았다…','같이 있어 줘','차가워…'],LB=['어, 왔네?','잠깐만, 숨 좀 돌리고','오늘 좀 빠른데?','나 아직 안 졌다~','이쪽이야, 이쪽!','다음엔 내가 이긴다?','어이, 어디 가?'];
 const SL=['…누구야? 오지 마!','부탁이야… 잘 안 보여','너… 날 기억해?','아직 나랑 놀아 줄 거야?','제발, 가지 마…'],BL=['오랜만이구나, 작은 별','나는 너무 커져 버렸어','아무도 곁에 오지 못했지','괜찮아… 도망치지 마','…고마워, 와 줘서'];
+const SLB=['어, 루미 왔네?','오늘 좀 눈부시지? 내가 좀 세졌나 봐','안 봐주기다? 나도 안 봐줄게','꽤 하는데? 이제 좀 진지하게 갈게','자, 마지막이야. 제대로 와 봐!'],BLB=['어, 꼬마 별 왔네','나 좀 커졌지? 신경 쓰지 마','여기까지 온 건 네가 처음이야','안 도망가네? 좋아, 계속해 보자','…야, 꽤 하잖아'],CL=['…지나갈 수 없어','돌아가!','내 파편들아, 막아!','왜 계속 오는 거야','…조금만 더, 가까이 와 줘'],CLB=['어, 왔어? 여긴 쉽게 못 지나가','한 번에 통과하려고? 안 되지~','얘들아, 좀 막아봐!','끈질기네, 그거 마음에 들어','좋아, 이제 거의 다 왔어'];
 const SP=[[5.5,1.9,1,2,{}],[4.5,1.6,1,3,{g:.5}],[3.8,1.4,1,4,{moon:1,w:.6}],[3.6,1.4,1,4,{rev:1}],[3.4,1.2,2,5,{g:1,w:1.1}]];
 const BP=[[5.6,1.85,1,4,{g:.6,w:.6,moon:1},0,0],[4.8,1.7,1,5,{rev:1},0,0],[4.2,1.55,2,5,{g:1,w:.9},17,0],[0,1.4,1,6,{w:1.2},12,14],[3.5,1.35,2,6,{g:1.4,w:1.3},11,12]];
 const BC=['화성의 붉은 모래 너머에서<br>낮고 깊은 울림이 퍼져 나갔다.','부서진 별들의 파편이 하나둘 모여들었다.<br>태양이 외로움에 던져 보낸 장난감들이었다.','그 한가운데서 거대한 그림자가 눈을 떴다.<br><b>"…이곳은 지나갈 수 없어."</b><br>소행성대의 수호자, 케레스.','루미는 숨을 크게 들이마셨다.<br>"도망치지 않을 거야. 이번엔 부딪혀 볼래."'];
@@ -136,7 +137,7 @@ function phase(ph){
  else{const P=bk=='h3'&&!B?[7,2.2,1,1,{}]:(B?BP:SP)[ph],e=P[4];cfg.fl=P[0];cfg.fw=P[1];cfg.fn=P[2];bs.k=P[3];cfg.lw=34+ph*2;if(e.g!=null)cfg.g=e.g*(HC?1.4:1);if(e.w!=null)cfg.w=e.w;if(e.moon&&!rocks.some(r=>r.orb))addMoon(0,190,.6);if(e.rev&&!cfg.rev){cfg.rev=1;cfg.r0=tS}bs.ri=P[5]||0;bs.mi=P[6]||0}
  while(ch.length<bs.k)mk(ch.length);
  if(HC&&ph>=1&&!bs.x5){bs.x5=1;mk(50,5)}if(HC&&ph>=3&&!bs.x6){bs.x6=1;mk(51,6)}
- bn={t:3.5,s:bk=='belt'?['…지나갈 수 없어','돌아가!','내 파편들아, 막아!','왜 계속 오는 거야','…조금만 더, 가까이 와 줘'][ph]:(B?BL:SL)[ph]};
+ bn={t:3.5,s:(bk=='belt'?(U.lt?CLB:CL):B?(U.lt?BLB:BL):(U.lt?SLB:SL))[ph]};
 }
 const EV=['태양이 가늘게 떨렸다.<br>그런데 그 너머에서<br>더 오래된 빛이 눈을 떴다.','"…오지 마."<br>붉은 그림자가 하늘을 가득 채웠다.','<b>베텔게우스</b><br>태양의 형이 깨어났다.'];
 function scene(L,i,done){sc='scene';if(i<L.length){ovh(`<div class="fd en">${L[i]}</div><button id="b1">다음 ›</button><button id="b2" class="sc">건너뛰기</button>`);$('b1').onclick=()=>scene(L,i+1,done);$('b2').onclick=()=>scene(L,L.length,done)}else{$('ov').className='h';sc='play';done()}}
