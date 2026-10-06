@@ -30,10 +30,14 @@ input{font:inherit;background:#ffffff14;border:1px solid #ffffff33;border-radius
 .sy{color:#ffe3a8;font-size:17px}.sr{font-size:36px;color:#ffd23f;letter-spacing:6px}
 .en{font-size:20px;line-height:2}.fd{animation:fd 1.6s both}@keyframes fd{from{opacity:0;transform:translateY(14px)}}
 #hud span{background:#0b1030aa;padding:4px 10px;border-radius:999px;backdrop-filter:blur(6px);border:1px solid #ffffff22}
-body.lt{background:#eaf4ff;color:#1b2540}body.lt canvas{filter:invert(1) hue-rotate(180deg)}
-body.lt #ov{background:radial-gradient(ellipse at 50% 30%,#fff8e0f2,#cfe8ffee);color:#1b2540}
+body.lt{background:#cfe8ff;color:#1b2540}body.lt canvas{display:none}
+body.lt #ov{background:radial-gradient(ellipse at 50% 25%,#f0f9ff,#bfe0fa 55%,#8fc3ee);color:#1b2540}
 body.lt .cd{background:#ffffffaa;border-color:#0002}body.lt #hud span{background:#ffffffcc;color:#1b2540;border-color:#0002}
-body.lt input{background:#fff;color:#223;border-color:#0003}body.lt .sy{color:#b5651d}
+body.lt input{background:#fff;color:#223;border-color:#0003}body.lt .sy{color:#8a4a0f}
+body.lt #ov h1{background:linear-gradient(90deg,#b85500,#c2255c,#1864ab);-webkit-background-clip:text;background-clip:text;color:transparent}
+body.lt #ov button.sc,body.lt #ov .tb button,body.lt #ov .q{background:#1b254020;color:#1b2540}
+body.lt #ov .tb button.on{background:#2a7fff;color:#fff}
+body.lt .cd span,body.lt .sr{color:#b36b00}body.lt .qi{background:#ffffff99}
 .tb{display:flex;justify-content:center;gap:6px;margin-top:12px}#ov .tb button{margin:0;padding:8px 14px;font-size:15px;background:#ffffff22;box-shadow:none}#ov .tb button.on{background:#2a7fff}
 .op{text-align:left;margin-top:14px}.or{margin-bottom:6px}.op input{width:auto;padding:0;margin-right:8px}
 #ov .q{width:26px;height:26px;border-radius:50%;padding:0;margin:0 0 0 8px;box-shadow:none;background:#ffffff33;font-size:14px}
@@ -68,9 +72,9 @@ const TN='은신비숍',TP='9999';let TA=0;
 const K='solartag1';let DB={u:{},c:''},ei=0,rm=1,rf=1,wo={x:0,y:0,t:0};
 try{DB=JSON.parse(localStorage.getItem(K))||DB}catch(e){}
 let U=DB.u[DB.c]||null;
-function mig(u){u.st=u.st||[];u.bs=u.bs||[];while(u.st.length<13)u.st.push(0);while(u.bs.length<13)u.bs.push(0);u.hs=u.hs||Array(10).fill(0);u.hb=u.hb||Array(10).fill(0);u.opt=u.opt||{pr:0,one:0,beg:0};if(u.un>4)u.belt=1}
-function tuser(){const u={h:'',un:1,st:[],bs:[],t:0,end:1,hcall:1,belt:1,opt:{pr:1,one:0,beg:0}};mig(u);return u}
-if(U)mig(U);let O=U?U.opt:{pr:0,one:0,beg:0};if(U&&U.lt)document.body.classList.add('lt');let sm=0;
+function mig(u){u.st=u.st||[];u.bs=u.bs||[];while(u.st.length<13)u.st.push(0);while(u.bs.length<13)u.bs.push(0);u.hs=u.hs||Array(10).fill(0);u.hb=u.hb||Array(10).fill(0);u.opt=u.opt||{pr:0,one:0,beg:0,dl:1};if(u.opt.dl==null)u.opt.dl=1;if(u.un>4)u.belt=1}
+function tuser(){const u={h:'',un:1,st:[],bs:[],t:0,end:1,hcall:1,belt:1,opt:{pr:1,one:0,beg:0,dl:1}};mig(u);return u}
+if(U)mig(U);let O=U?U.opt:{pr:0,one:0,beg:0,dl:1};if(U&&U.lt)document.body.classList.add('lt');let sm=0;
 const sv=()=>{if(TA)return;try{localStorage.setItem(K,JSON.stringify(DB))}catch(e){}};
 const hs=q=>{let h=5381;for(const c of q)h=h*33^c.charCodeAt(0);return(h>>>0).toString(36)};
 function ovh(h){const o=$('ov');o.className='';o.innerHTML=`<div class="pn">${h}</div>`}
@@ -92,7 +96,7 @@ function sel(){cfg=null;sc='menu';document.body.classList.toggle('lt',!!U.lt);
  document.querySelectorAll('.cd').forEach(e=>e.onclick=()=>{if(!e.classList.contains('lk'))intro(+e.dataset.i,sm==1)});
  document.querySelectorAll('.tb button').forEach(b=>b.onclick=()=>{sm=+b.dataset.m;sel()});
  $('op').onclick=opts;$('lo').onclick=()=>{if(!TA){DB.c='';sv()}TA=0;U=null;document.body.classList.remove('lt');title()};if(U.end&&!TA)$('e2').onclick=()=>ending(0)}
-function opts(){const L=[['pr','연습 모드','HP가 0이 되어도 절대 괴물에게 사망하지 않아요 (HP가 마이너스까지 내려가요). 대신 레벨을 해금하거나 점수를 갱신할 수 없어요.'],['one','한 생명','HP가 1로 시작해요.'],['beg','거지 모드','술래 변신 등의 부스터가 사라져요.']];
+function opts(){const L=[['pr','연습 모드','HP가 0이 되어도 절대 괴물에게 사망하지 않아요 (HP가 마이너스까지 내려가요). 대신 레벨을 해금하거나 점수를 갱신할 수 없어요.'],['one','한 생명','HP가 1로 시작해요.'],['beg','거지 모드','술래 변신 등의 부스터가 사라져요.'],['dl','괴물 대사','켜면 그림자(괴물)들이 가끔 대사를 말해요. 끄면 그림자 대사가 나오지 않아요. 컷신은 그대로 나와요.']];
  ovh(`<h1>옵션</h1><div class="op">${L.map(([k,n,d])=>`<div class="or"><label><input type="checkbox" data-k="${k}" ${O[k]?'checked':''}${TA&&k=='pr'?' disabled':''}>${n}${TA&&k=='pr'?' 🔒':''}</label><button class="q" data-q="${k}">?</button><div class="qi" id="q_${k}">${d}</div></div>`).join('')}</div><button id="ob2">돌아가기</button>`);
  document.querySelectorAll('.op input').forEach(e=>e.onchange=()=>{O[e.dataset.k]=e.checked?1:0;sv();e.blur()});
  document.querySelectorAll('.q').forEach(e=>e.onclick=()=>{const d=$('q_'+e.dataset.q);d.style.display=d.style.display=='block'?'none':'block'});
@@ -172,7 +176,7 @@ const rnd=(a,b)=>a+Math.random()*(b-a),fmt=s=>{s=Math.max(0,s);return Math.floor
 const ent=(x,y,r)=>({x,y,vx:0,vy:0,r});
 function rp(m){for(let i=0;i<30;i++){const x=rnd(40,W-40),y=rnd(60,H-40);if(Math.hypot(x-C.x,y-C.y)>RR+m*S&&Math.hypot(x-p.x,y-p.y)>120*S)return{x,y}}return{x:40,y:60}}
 function start(i,hc){
- if(TA)O.pr=1;
+ if(TA)O.pr=1;document.body.classList.remove('lt');
  st=i;HC=!!hc;cfg=Object.assign({},ST[i]);tS=0;
  if(HC){cfg.k++;if(!cfg.boss)cfg.dur=270;cfg.g*=1.4;if(cfg.w)cfg.w*=1.4;if(cfg.rk)cfg.rk=Math.round(cfg.rk*1.5)+2;cfg.sm=1.1;if(cfg.boss)cfg.hpm=1.35}
  lives=O.one?1:(HC||i==12)?5:3;score=0;hits=0;cb=0;cbT=0;ex=0;pts=[];goo=[];lz=[];zp=[];bu=[];fire=[];rg=[];bn=null;fatal=0;bs=null;cfg.fl=0;
@@ -215,7 +219,7 @@ function upd(dt){
   if(c.fz>0){c.fz-=dt;c.vx*=.92;c.vy*=.92}
   else{
    const ld=c.i%2?.45:0,ex=p.x+p.vx*ld-c.x,ey=p.y+p.vy*ld-c.y,d=Math.hypot(ex,ey)||1,dir=pw>0?-1:1;
-   c.ln=(c.ln||rnd(4,12))-dt;if(c.ln<=0&&!c.hd){c.ln=rnd(9,16);const L=U.lt?LB:LD;fx(c.x,c.y-c.r-6,U.lt?'#ffd27a':'#fff',0,L[(Math.random()*L.length)|0])}
+   c.ln=(c.ln||rnd(4,12))-dt;if(c.ln<=0&&!c.hd){c.ln=rnd(9,16);if(O.dl){const L=U.lt?LB:LD;fx(c.x,c.y-c.r-6,U.lt?'#ffd27a':'#fff',0,L[(Math.random()*L.length)|0])}}
    if(c.cy!=null){c.cy+=dt;c.hd=c.cy%20>14}
    if(c.ty==5&&pw>0)c.aw=0;else if(c.ty==5){c.at=(c.at||2)-dt;if(c.at<=0){c.at=3.4;c.aw=.9}if(c.aw>0){c.aw-=dt;c.vx*=.9;c.vy*=.9;if(c.aw<=0){const a=Math.atan2(p.y-c.y,p.x-c.x);bu.push({x:c.x,y:c.y,vx:Math.cos(a)*380*S,vy:Math.sin(a)*380*S,l:3,dm:1});fx(c.x,c.y,'#9ef',8)}}}
    if(c.ty==6&&pw<=0){c.at=(c.at||2)-dt;if(c.at<=0){c.at=3.8;zp.push({x:p.x+p.vx*.35,y:p.y+p.vy*.35,t:0,w:1.1,r:62*S,dm:HC?2:1,mz:1})}}
