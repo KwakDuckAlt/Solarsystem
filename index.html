@@ -96,10 +96,12 @@ function sel(){cfg=null;sc='menu';document.body.classList.toggle('lt',!!U.lt);
  document.querySelectorAll('.cd').forEach(e=>e.onclick=()=>{if(!e.classList.contains('lk'))intro(+e.dataset.i,sm==1)});
  document.querySelectorAll('.tb button').forEach(b=>b.onclick=()=>{sm=+b.dataset.m;sel()});
  $('op').onclick=opts;$('lo').onclick=()=>{if(!TA){DB.c='';sv()}TA=0;U=null;document.body.classList.remove('lt');title()};if(U.end&&!TA)$('e2').onclick=()=>{document.body.classList.remove('lt');ending(0)};if(U.lt&&!TA)$('e3').onclick=()=>{document.body.classList.remove('lt');ending2(0)}}
-function opts(){const L=[['pr','연습 모드','HP가 0이 되어도 절대 괴물에게 사망하지 않아요 (HP가 마이너스까지 내려가요). 대신 레벨을 해금하거나 점수를 갱신할 수 없어요.'],['one','한 생명','HP가 1로 시작해요.'],['beg','거지 모드','술래 변신 등의 부스터가 사라져요.'],['dl','괴물 대사','켜면 그림자(괴물)들이 가끔 대사를 말해요. 끄면 그림자 대사가 나오지 않아요. 컷신은 그대로 나와요.']];
- ovh(`<h1>옵션</h1><div class="op">${L.map(([k,n,d])=>`<div class="or"><label><input type="checkbox" data-k="${k}" ${O[k]?'checked':''}${TA&&k=='pr'?' disabled':''}>${n}${TA&&k=='pr'?' 🔒':''}</label><button class="q" data-q="${k}">?</button><div class="qi" id="q_${k}">${d}</div></div>`).join('')}</div><button id="ob2">돌아가기</button>`);
+function opts(){const L=[['pr','연습 모드','HP가 0이 되어도 절대 괴물에게 사망하지 않아요 (HP가 마이너스까지 내려가요). 대신 레벨을 해금하거나 점수를 갱신할 수 없어요.'],['one','한 생명','HP가 1로 시작해요.'],['beg','거지 모드','술래 변신 등의 부스터가 사라져요.']];
+ const DLR=`<div class="or"><div>괴물 대사<button class="q" data-q="dl">?</button></div><div class="tb" style="justify-content:flex-start;margin-top:6px">${[[0,'끄기'],[2,'보스만'],[1,'켜기']].map(([v,n])=>`<button data-d="${v}" class="${O.dl==v?'on':''}">${n}</button>`).join('')}</div><div class="qi" id="q_dl">끄기: 보스 대사를 포함해 어떤 대사도 나오지 않아요.<br>보스만: 보스 대사만 나오고 그림자 대사는 나오지 않아요.<br>켜기: 모든 괴물 대사가 나와요.<br>컷신은 어떤 설정이든 그대로 나와요.</div></div>`;
+ ovh(`<h1>옵션</h1><div class="op">${L.map(([k,n,d])=>`<div class="or"><label><input type="checkbox" data-k="${k}" ${O[k]?'checked':''}${TA&&k=='pr'?' disabled':''}>${n}${TA&&k=='pr'?' 🔒':''}</label><button class="q" data-q="${k}">?</button><div class="qi" id="q_${k}">${d}</div></div>`).join('')}${DLR}</div><button id="ob2">돌아가기</button>`);
  document.querySelectorAll('.op input').forEach(e=>e.onchange=()=>{O[e.dataset.k]=e.checked?1:0;sv();e.blur()});
  document.querySelectorAll('.q').forEach(e=>e.onclick=()=>{const d=$('q_'+e.dataset.q);d.style.display=d.style.display=='block'?'none':'block'});
+ document.querySelectorAll('.op .tb button').forEach(b=>b.onclick=()=>{O.dl=+b.dataset.d;sv();opts()});
  $('ob2').onclick=sel}
 function intro(i,hc){if(TA){$('ov').className='h';start(i,hc);return}ov(`${hc?'🔥 ':''}${ST[i].n}`,`<i class="sy">${SY[i]}</i><br><br><small>${ST[i].h}${hc?'<br>하드코어: 시간↑ · 괴물 강화 · 신규 괴물 · 희귀 부스터 🌟':''}${ST[i].boss?'<br>⚔ 대시로 부딪히거나, 술래 변신 후 접촉해 공격!':''}</small>`,'출발!',()=>start(i,hc),'뒤로',sel)}
 function cut(L,i,done){cfg=null;sc='end';ei=i;if(i<L.length){ovh(`<div class="fd en">${L[i]}</div><button id="b1">다음 ›</button>`);$('b1').onclick=()=>cut(L,i+1,done)}else done()}
@@ -137,7 +139,7 @@ function phase(ph){
  else{const P=bk=='h3'&&!B?[7,2.2,1,1,{}]:(B?BP:SP)[ph],e=P[4];cfg.fl=P[0];cfg.fw=P[1];cfg.fn=P[2];bs.k=P[3];cfg.lw=34+ph*2;if(e.g!=null)cfg.g=e.g*(HC?1.4:1);if(e.w!=null)cfg.w=e.w;if(e.moon&&!rocks.some(r=>r.orb))addMoon(0,190,.6);if(e.rev&&!cfg.rev){cfg.rev=1;cfg.r0=tS}bs.ri=P[5]||0;bs.mi=P[6]||0}
  while(ch.length<bs.k)mk(ch.length);
  if(HC&&ph>=1&&!bs.x5){bs.x5=1;mk(50,5)}if(HC&&ph>=3&&!bs.x6){bs.x6=1;mk(51,6)}
- bn={t:3.5,s:(bk=='belt'?(U.lt?CLB:CL):B?(U.lt?BLB:BL):(U.lt?SLB:SL))[ph]};
+ if(O.dl)bn={t:3.5,s:(bk=='belt'?(U.lt?CLB:CL):B?(U.lt?BLB:BL):(U.lt?SLB:SL))[ph]};
 }
 const EV=['태양이 가늘게 떨렸다.<br>그런데 그 너머에서<br>더 오래된 빛이 눈을 떴다.','"…오지 마."<br>붉은 그림자가 하늘을 가득 채웠다.','<b>베텔게우스</b><br>태양의 형이 깨어났다.'];
 function scene(L,i,done){sc='scene';if(i<L.length){ovh(`<div class="fd en">${L[i]}</div><button id="b1">다음 ›</button><button id="b2" class="sc">건너뛰기</button>`);$('b1').onclick=()=>scene(L,i+1,done);$('b2').onclick=()=>scene(L,L.length,done)}else{$('ov').className='h';sc='play';done()}}
@@ -220,7 +222,7 @@ function upd(dt){
   if(c.fz>0){c.fz-=dt;c.vx*=.92;c.vy*=.92}
   else{
    const ld=c.i%2?.45:0,ex=p.x+p.vx*ld-c.x,ey=p.y+p.vy*ld-c.y,d=Math.hypot(ex,ey)||1,dir=pw>0?-1:1;
-   c.ln=(c.ln||rnd(4,12))-dt;if(c.ln<=0&&!c.hd){c.ln=rnd(9,16);if(O.dl){const L=U.lt?LB:LD;fx(c.x,c.y-c.r-6,U.lt?'#ffd27a':'#fff',0,L[(Math.random()*L.length)|0])}}
+   c.ln=(c.ln||rnd(4,12))-dt;if(c.ln<=0&&!c.hd){c.ln=rnd(9,16);if(O.dl==1){const L=U.lt?LB:LD;fx(c.x,c.y-c.r-6,U.lt?'#ffd27a':'#fff',0,L[(Math.random()*L.length)|0])}}
    if(c.cy!=null){c.cy+=dt;c.hd=c.cy%20>14}
    if(c.ty==5&&pw>0)c.aw=0;else if(c.ty==5){c.at=(c.at||2)-dt;if(c.at<=0){c.at=3.4;c.aw=.9}if(c.aw>0){c.aw-=dt;c.vx*=.9;c.vy*=.9;if(c.aw<=0){const a=Math.atan2(p.y-c.y,p.x-c.x);bu.push({x:c.x,y:c.y,vx:Math.cos(a)*380*S,vy:Math.sin(a)*380*S,l:3,dm:1});fx(c.x,c.y,'#9ef',8)}}}
    if(c.ty==6&&pw<=0){c.at=(c.at||2)-dt;if(c.at<=0){c.at=3.8;zp.push({x:p.x+p.vx*.35,y:p.y+p.vy*.35,t:0,w:1.1,r:62*S,dm:HC?2:1,mz:1})}}
