@@ -171,7 +171,7 @@ function hz(dt){
  for(let i=fire.length-1;i>=0;i--){const q=fire[i];q.l-=dt;if(inv<=0&&Math.hypot(p.x-q.x,p.y-q.y)<q.r+p.r){hit(1);if(sc!=='play')return 1}if(q.l<=0)fire.splice(i,1)}
  for(let i=rg.length-1;i>=0;i--){const g=rg[i];g.t+=dt;if(g.t>g.w){g.r+=g.sp*dt;const d=Math.hypot(p.x-C.x,p.y-C.y);if(inv<=0&&Math.abs(d-g.r)<g.th+p.r){let da=Math.abs(Math.atan2(p.y-C.y,p.x-C.x)-g.a);da=Math.min(da,6.283-da);if(da>g.gp){hit(g.dm);if(sc!=='play')return 1}}}if(g.r>Math.hypot(W,H))rg.splice(i,1)}
 }
-let sc='menu',st=0,lives=3,score=0,tS=0,tT=0,p,ch=[],orbs=[],rocks=[],clouds=[],fl=null,flT=4,pw=0,inv=0,dT=0,dC=0,nO=1,nP=15,shake=0,paused=false,dReq=false,cfg=null,RR=0,rev=false,hits=0,cb=0,cbT=0,ex=0,pts=[],goo=[],lz=[],zp=[],bu=[],fire=[],rg=[],bn=null,fatal=0,bs=null,HC=false,nN=40,RQ=0;
+let sc='menu',st=0,lives=3,score=0,tS=0,tT=0,p,ch=[],orbs=[],rocks=[],clouds=[],fl=null,flT=4,pw=0,inv=0,dT=0,dC=0,nO=1,nP=15,shake=0,paused=false,dReq=false,cfg=null,RR=0,rev=false,hits=0,cb=0,cbT=0,ex=0,pts=[],goo=[],lz=[],zp=[],bu=[],fire=[],rg=[],bn=null,fatal=0,bs=null,HC=false,EZ=false,nN=40,RQ=0;
 const C={x:0,y:0},keys={},jv={on:0,x:0,y:0,ox:0,oy:0,px:0,py:0,id:-1};
 const stars=Array.from({length:110},()=>({x:Math.random(),y:Math.random(),r:Math.random()*1.5+.4,t:Math.random()*6}));
 rs();addEventListener('resize',rs);
@@ -182,7 +182,8 @@ function start(i,hc){
  if(TA)O.pr=1;document.body.classList.remove('lt');
  st=i;HC=!!hc;cfg=Object.assign({},ST[i]);tS=0;
  if(HC){cfg.k++;if(!cfg.boss)cfg.dur=270;cfg.g*=1.4;if(cfg.w)cfg.w*=1.4;if(cfg.rk)cfg.rk=Math.round(cfg.rk*1.5)+2;cfg.sm=1.1;if(cfg.boss)cfg.hpm=1.35}
- lives=O.one?1:(HC||i==12)?5:3;score=0;hits=0;cb=0;cbT=0;ex=0;pts=[];goo=[];lz=[];zp=[];bu=[];fire=[];rg=[];bn=null;fatal=0;bs=null;cfg.fl=0;
+ EZ=HC&&i>=6&&i<=8;if(EZ){cfg.k=ST[i].k;cfg.dur=200;cfg.sm=i==8?.85:.95;cfg.g=ST[i].g*1.15;if(ST[i].w)cfg.w=ST[i].w*1.1}
+ lives=O.one?1:EZ?7:(HC||i==12)?5:3;score=0;hits=0;cb=0;cbT=0;ex=0;pts=[];goo=[];lz=[];zp=[];bu=[];fire=[];rg=[];bn=null;fatal=0;bs=null;cfg.fl=0;
  RR=cfg.R*S;p=ent(W*.15,H*.85,12*S);ch=[];rocks=[];clouds=[];
  if(cfg.boss){const h=Math.round(cfg.hp*(cfg.hpm||1));bs={hp:h,mx:h,iv:0,dead:0,ph:-1,chase:0,ct:0,dtm:0,betel:0,gt:6,gw:0,ga:0,k:0};cfg.noex=1}
  if(cfg.hid)cfg.noex=1;if(cfg.hid==2)RU.forEach(r=>r.on=0);
@@ -190,7 +191,7 @@ function start(i,hc){
  if(HC&&!cfg.boss){if(st>=6)mk(50,5);if(st>=8)mk(51,6)}
  if(cfg.moon){addMoon(0,190,.6);if(HC)addMoon(3.14,130,-.8)}
  addRocks(cfg.rk||0);if(cfg.cl)addClouds(HC?5:3);
- pw=0;inv=1.5;dT=0;dC=0;orbs=[];nO=1;nP=cfg.boss?7:15;nN=40;flT=3;sc='play';
+ pw=0;inv=1.5;dT=0;dC=0;orbs=[];nO=1;nP=cfg.boss?7:15;nN=EZ?20:40;flT=3;sc='play';
 }
 function hit(d){d=d||1;if(fatal)d=Math.max(1,lives);lives-=d;hits++;inv=2;shake=.35;fx(p.x,p.y,'#f66',26);if(lives<=0&&!O.pr){sc='over';sv();ov('그림자에게 붙잡혔어요',`<i class="sy">"괜찮아, 다시 한 번 가보자."</i><br><br>${cfg.n} · 점수 ${score}`,'다시 도전',()=>start(st,HC),'스테이지 선택',sel)}}
 function slow(x,y,pl){let f=1;if(pl)for(const g of goo)if(Math.hypot(x-g.x,y-g.y)<g.r)f=Math.min(f,1-.5*g.l/7);for(const c of clouds)if(Math.hypot(x-c.x,y-c.y)<c.r)f=.55;if(cfg.ring){const d=Math.hypot(x-C.x,y-C.y);if(d>RR*1.6&&d<RR*3)f=.5}return f}
@@ -225,10 +226,10 @@ function upd(dt){
    c.ln=(c.ln||rnd(4,12))-dt;if(c.ln<=0&&!c.hd){c.ln=rnd(9,16);if(O.dl==1){const L=U.lt?LB:LD;fx(c.x,c.y-c.r-6,U.lt?'#ffd27a':'#fff',0,L[(Math.random()*L.length)|0])}}
    if(c.cy!=null){c.cy+=dt;c.hd=c.cy%20>14}
    if(c.ty==5&&pw>0)c.aw=0;else if(c.ty==5){c.at=(c.at||2)-dt;if(c.at<=0){c.at=3.4;c.aw=.9}if(c.aw>0){c.aw-=dt;c.vx*=.9;c.vy*=.9;if(c.aw<=0){const a=Math.atan2(p.y-c.y,p.x-c.x);bu.push({x:c.x,y:c.y,vx:Math.cos(a)*380*S,vy:Math.sin(a)*380*S,l:3,dm:1});fx(c.x,c.y,'#9ef',8)}}}
-   if(c.ty==6&&pw<=0){c.at=(c.at||2)-dt;if(c.at<=0){c.at=3.8;zp.push({x:p.x+p.vx*.35,y:p.y+p.vy*.35,t:0,w:1.1,r:62*S,dm:HC?2:1,mz:1})}}
+   if(c.ty==6&&pw<=0){c.at=(c.at||2)-dt;if(c.at<=0){c.at=3.8;zp.push({x:p.x+p.vx*.35,y:p.y+p.vy*.35,t:0,w:1.1,r:62*S,dm:HC&&!EZ?2:1,mz:1})}}
    if(c.ty==7&&pw<=0){c.at=(c.at||0)-dt;if(c.at<=0&&fire.length<60){c.at=.5;fire.push({x:c.x,y:c.y,l:3.5,r:15*S})}}
    if(c.ty==3&&pw<=0&&!(bs&&bs.chase)){c.gt=(c.gt||0)-dt;if(c.gt<=0&&goo.length<40){c.gt=HC?.6:.9;goo.push({x:c.x,y:c.y,l:7,r:30*S})}}
-   if(c.ty==4&&pw<=0){const bx=c.x-p.x,by=c.y-p.y,bd=Math.hypot(bx,by)||1,R2=(HC?260:210)*S;if(bd<R2){const f=(HC?120:90)*S*(1-bd/R2)*dt;p.x+=bx/bd*f;p.y+=by/bd*f}}
+   if(c.ty==4&&pw<=0){const bx=c.x-p.x,by=c.y-p.y,bd=Math.hypot(bx,by)||1,R2=(HC&&!EZ?260:210)*S;if(bd<R2){const f=(HC&&!EZ?120:90)*S*(1-bd/R2)*dt;p.x+=bx/bd*f;p.y+=by/bd*f}}
    c.dt-=dt;if(c.dt<=0){if(c.ty==1&&!(bs&&bs.chase)){c.ds=.45;c.dt=HC?rnd(1.8,3):rnd(2.5,4)}else if(st>=2&&c.ty==0){c.ds=.5;c.dt=rnd(4,7)}else c.dt=9}c.ds=Math.max(0,c.ds-dt);
    if(c.ty==2&&!(bs&&bs.chase)){c.bt-=dt;if(c.bw>0){c.bw-=dt;c.vx*=.9;c.vy*=.9;if(c.bw<=0){fx(c.x,c.y,'#a46bff',14);c.x=c.gx;c.y=c.gy;fx(c.x,c.y,'#a46bff',14)}}else if(c.bt<=0&&pw<=0){c.bw=HC?.8:1;c.bt=HC?rnd(3.5,6):rnd(5,8);const a=rnd(0,6.28);c.gx=Math.min(W-20,Math.max(20,p.x+Math.cos(a)*190*S));c.gy=Math.min(H-20,Math.max(70,p.y+Math.sin(a)*190*S));if(RR){const dx=c.gx-C.x,dy=c.gy-C.y,d=Math.hypot(dx,dy)||1;if(d<RR+30*S){c.gx=C.x+dx/d*(RR+30*S);c.gy=C.y+dy/d*(RR+30*S)}}}}
    const s=((cfg.sb!=null?cfg.sb:105+st*8)+(cfg.b||0))*S*[1,.85,1,.75,.55,.7,.75,1.1][c.ty]*rm*(pw>0?.85:1)*(c.ds>0?(c.ty==1?(HC?3.4:2.8):2):1)*slow(c.x,c.y),q=Math.min(1,dt*5),smm=(cfg.sm||1)*(cfg.hid==2&&cfg.w?.85:1);
@@ -246,9 +247,9 @@ function upd(dt){
   }
  }
  nO-=dt;if(nO<=0&&orbs.length<7){const q=rp(25);orbs.push({x:q.x,y:q.y,pw:0});nO=1.6}
- if(ex<2&&!cfg.noex&&tS>60*(ex+1)){ex++;mk(cfg.k+ex-1);const c=ch[ch.length-1];fx(c.x,c.y,'#f55',20,'새 그림자 출현!')}
+ if(ex<2&&!cfg.noex&&!EZ&&tS>60*(ex+1)){ex++;mk(cfg.k+ex-1);const c=ch[ch.length-1];fx(c.x,c.y,'#f55',20,'새 그림자 출현!')}
  nP-=dt;if(nP<=0){nP=cfg.boss?10.5:16;if(!O.beg&&!(bs&&bs.chase)){if(orbs.some(o=>o.pw==1))nP=3;else{const q=rp(25);orbs.push({x:q.x,y:q.y,pw:1})}}}
- if(HC){nN-=dt;if(nN<=0){nN=42;if(!O.beg&&!(bs&&bs.chase)){if(orbs.some(o=>o.pw==2))nN=5;else{const q=rp(25);orbs.push({x:q.x,y:q.y,pw:2})}}}}
+ if(HC){nN-=dt;if(nN<=0){nN=EZ?26:42;if(!O.beg&&!(bs&&bs.chase)){if(orbs.some(o=>o.pw==2))nN=5;else{const q=rp(25);orbs.push({x:q.x,y:q.y,pw:2})}}}}
  for(let i=orbs.length-1;i>=0;i--){const o=orbs[i];if(Math.hypot(p.x-o.x,p.y-o.y)<p.r+(o.pw?14:9)*S){orbs.splice(i,1);cbT=2.2;cb++;if(o.pw==2){nova()}else if(o.pw){pw=7;score+=30;bu=[];fire=[];zp=zp.filter(z=>!z.mz);fx(o.x,o.y,'#ffd23f',24,'술래 변신!')}else{const g=10*Math.min(cb,8);score+=g;fx(o.x,o.y,'#5ff',8,cb>1?`+${g} x${cb}`:'+10')}}}
  cbT=Math.max(0,cbT-dt);if(!cbT)cb=0;
  if(hz(dt))return;
@@ -291,7 +292,7 @@ function draw(t){
  for(const b of bu)glow(b.x,b.y,6*S,'#9ef',10);
  for(const q of fire){ctx.fillStyle=`rgba(255,110,30,${Math.min(.5,q.l/3.5*.5)})`;ctx.beginPath();ctx.arc(q.x,q.y,q.r,0,7);ctx.fill()}
  for(const c of ch){ctx.globalAlpha=c.hd?.18:1;glow(c.x,c.y,c.r*(c.ty==1?1.15:1),c.fz>0?'#8cf':pw>0?'#5cffc8':['#ff4d6d','#ff9a3c','#a46bff','#c8e04a','#ff5fd0','#7fd8ff','#6a6bff','#ff5a1f'][c.ty],16);if(c.ty==5&&c.aw>0){ctx.strokeStyle='#9ef8';ctx.lineWidth=2;ctx.beginPath();ctx.moveTo(c.x,c.y);ctx.lineTo(p.x,p.y);ctx.stroke()}
- if(c.ty==4){ctx.fillStyle='#05060f';ctx.beginPath();ctx.arc(c.x,c.y,c.r*.6,0,7);ctx.fill();ctx.strokeStyle='#ff5fd033';ctx.lineWidth=2;ctx.setLineDash([4,6]);ctx.beginPath();ctx.arc(c.x,c.y,(HC?260:210)*S,0,7);ctx.stroke();ctx.setLineDash([])}
+ if(c.ty==4){ctx.fillStyle='#05060f';ctx.beginPath();ctx.arc(c.x,c.y,c.r*.6,0,7);ctx.fill();ctx.strokeStyle='#ff5fd033';ctx.lineWidth=2;ctx.setLineDash([4,6]);ctx.beginPath();ctx.arc(c.x,c.y,(HC&&!EZ?260:210)*S,0,7);ctx.stroke();ctx.setLineDash([])}
  if(c.bw>0){ctx.strokeStyle='#fff';ctx.lineWidth=2;ctx.beginPath();ctx.arc(c.x,c.y,c.r*(2+Math.sin(t*30)*.3),0,7);ctx.stroke();ctx.strokeStyle='#d9b8ff';ctx.lineWidth=3;ctx.setLineDash([6,5]);ctx.beginPath();ctx.arc(c.gx,c.gy,c.r*(1.6+c.bw*2),0,7);ctx.stroke();ctx.setLineDash([]);ctx.globalAlpha=.4;glow(c.gx,c.gy,c.r,'#a46bff',12);ctx.globalAlpha=1}
   const a=Math.atan2(p.y-c.y,p.x-c.x);ctx.fillStyle='#fff';for(const s of[-.5,.5]){ctx.beginPath();ctx.arc(c.x+Math.cos(a+s)*c.r*.5,c.y+Math.sin(a+s)*c.r*.5,c.r*.22,0,7);ctx.fill()}ctx.globalAlpha=1}
  for(const q of pts){ctx.globalAlpha=Math.max(0,q.l/q.m);ctx.fillStyle=q.c;if(q.tx){ctx.font=`700 ${15*Math.max(1,S)}px system-ui,sans-serif`;ctx.textAlign='center';ctx.fillText(q.tx,q.x,q.y)}else ctx.fillRect(q.x,q.y,3*S+1,3*S+1)}ctx.globalAlpha=1;
