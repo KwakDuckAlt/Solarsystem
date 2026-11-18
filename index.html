@@ -516,7 +516,7 @@ const SEQ=[[.12,.18],[.36,.5],[.2,.86]],SEQ2=[[.4,.14],[.1,.5],[.38,.86],[.46,.5
 function initPz(){const k=cfg.pz;if(!k)return;const z=X.pz={k,pg:0,n:3,done:0,hold:0,i:0,lit:0,a:0,cd:0};
  if(k=='sw'){z.n=HC?6:5;z.win=HC?4.5:6}
  else if(k=='occ'){z.n=4;z.need=HC?6.5:5;occPos(z,1)}
- else if(k=='seal'){z.rd=0;z.n=2;z.need=HC?2.1:1.8;z.dec=HC?9:12;z.L=[0,0,0,0]}
+ else if(k=='seal'){z.rd=0;z.n=2;z.need=HC?2.1:1.8;z.dec=HC?18:12;z.L=[0,0,0,0]}
  else if(k=='gate'){z.n=3;z.need=HC?2.4:2;z.hs=[0,0,0];const sp=HC?1.2:1;for(let j=0;j<2;j++){const R=[130,230][j],n=Math.round(6.283*R/33);for(let q=4;q<n;q++){const r=ent(0,0,16*S);r.orb=1;r.a=6.283*q/n;r.or=R;r.sp=[.3,-.22][j]*sp;r.pz=1;rocks.push(r)}}}
  else if(k=='path'){z.n=6}}
 function occPos(z,first){const R=[170,230,130,200][z.pg%4];z.ro=R;z.dr=z.pg%2?-1:1;z.a0=first?3.5:X.te*.5*z.dr+Math.PI}
